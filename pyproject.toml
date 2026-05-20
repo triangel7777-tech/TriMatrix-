@@ -1,0 +1,12 @@
+[project]
+name = "trimatrix-master-lifecycle"
+version = "0.5.7"
+description = "TriMatrix Master Lifecycle with proof harness and GitHub Actions verifier"
+requires-python = ">=3.10"
+
+[project.scripts]
+trimatrix = "trimatrix.cli:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

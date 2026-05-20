@@ -1,0 +1,62 @@
+name: TriMatrix External Verifier
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - trimatrix-v5-7-auto-github-capture
+
+jobs:
+  external-verifier:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: python -m pip install -e .
+
+      - name: Run standard-library smoke tests
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from trimatrix.cli import ci_verifier, proof, status, verify_proof
+
+          s = status()
+          assert s["schema"] == "trimatrix.master_lifecycle.status"
+          assert s["version"] == "0.5.7"
+
+          out = Path("smoke_outputs")
+          out.mkdir(exist_ok=True)
+          packet = out / "packet.json"
+          proof(str(packet))
+          verification = verify_proof(str(packet))
+          assert verification["ok"] is True
+
+          result = ci_verifier(str(out / "ci_outputs"))
+          assert result["passed"] is True
+          assert result["real_github_actions_environment"] is True
+          assert result["promotion"]["decision"] == "LEVEL_6_CANDIDATE"
+          assert result["promotion"]["max_level"] == 6
+          PY
+
+      - name: Run TriMatrix CI verifier
+        run: trimatrix ci-verifier --output-dir ci_verifier_outputs
+
+      - name: Show promotion report
+        run: cat ci_verifier_outputs/promotion_report.json
+
+      - name: Upload verifier outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: trimatrix-ci-verifier-outputs
+          path: ci_verifier_outputs/
