@@ -1,0 +1,41 @@
+name: TriMatrix External Verifier
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - trimatrix-v5-7-auto-github-capture
+
+jobs:
+  external-verifier:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: python -m pip install -e .
+
+      - name: Run tests
+        run: python -m pytest -q
+
+      - name: Run TriMatrix CI verifier
+        run: trimatrix ci-verifier --output-dir ci_verifier_outputs
+
+      - name: Show promotion report
+        run: cat ci_verifier_outputs/promotion_report.json
+
+      - name: Upload verifier outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: trimatrix-ci-verifier-outputs
+          path: ci_verifier_outputs/
