@@ -1,0 +1,48 @@
+name: TriMatrix Level 6 Dossier
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  level6-dossier:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: python -m pip install -e .
+
+      - name: Run TriMatrix CI verifier
+        run: trimatrix ci-verifier --output-dir ci_verifier_outputs
+
+      - name: Assemble Level 6 dossier
+        run: |
+          python scripts/assemble_level6_dossier.py \
+            --artifact-dir ci_verifier_outputs \
+            --out-dir level6_dossier
+
+      - name: Show dossier summary
+        run: cat level6_dossier/level6_closeout_dossier.md
+
+      - name: Upload verifier outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: trimatrix-ci-verifier-outputs
+          path: ci_verifier_outputs/
+
+      - name: Upload Level 6 dossier
+        uses: actions/upload-artifact@v4
+        with:
+          name: trimatrix-level6-dossier
+          path: level6_dossier/
