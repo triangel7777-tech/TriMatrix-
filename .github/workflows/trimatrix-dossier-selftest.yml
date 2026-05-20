@@ -1,0 +1,31 @@
+name: TriMatrix Dossier Self-Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - trimatrix-v5-8-dossier-selftest
+
+jobs:
+  dossier-selftest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run dossier assembler self-test
+        run: python scripts/selftest_level6_dossier.py
+
+      - name: Upload self-test outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: trimatrix-dossier-selftest-outputs
+          path: selftest_outputs/
