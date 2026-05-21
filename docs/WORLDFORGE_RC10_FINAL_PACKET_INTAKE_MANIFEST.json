@@ -1,0 +1,29 @@
+{
+  "schema": "worldforge.rc10.final_packet_intake_manifest.v1",
+  "repo_full_name": "triangel7777-tech/TriMatrix-",
+  "workflow_name": "TriMatrix External Verifier",
+  "workflow_path": ".github/workflows/trimatrix-external-verifier.yml",
+  "expected_artifact_name": "trimatrix-ci-verifier-outputs",
+  "lane_a_workflow_run_evidence": {
+    "run_id": null,
+    "run_url": null,
+    "jobs_imported": false,
+    "logs_imported": false,
+    "artifact_imported": false,
+    "artifact_sha256": null,
+    "promotion_report_parsed": false,
+    "promotion_report_sha256": null
+  },
+  "lane_b_independent_review_evidence": {
+    "reviewer_handle": null,
+    "independence_statement": null,
+    "reviewed_run_id": null,
+    "reviewed_artifact_sha256": null,
+    "review_result": null,
+    "public_reference_or_signature": null,
+    "review_timestamp_utc": null
+  },
+  "gate_rule": "final packet can be marked external_review_ready only when both lanes are complete and the review result is approved_for_external_review_packet",
+  "non_authorization_rule": "World-Forge must not self-authorize Level 6",
+  "current_status": "intake_manifest_template_only"
+}
