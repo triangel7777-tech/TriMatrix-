@@ -1,0 +1,11 @@
+{
+  "subject": "omega_kernel_v1_2_repository_bootstrap_subset",
+  "source_artifact": "omega_kernel_v1_2.zip",
+  "source_artifact_sha256": "2533c79f16e2a158d6a22de19c9a9e4769ed93e6529274d5531c5b9e7f40e1ca",
+  "repository": "triangel7777-tech/TriMatrix-",
+  "branch": "execution-prime-omega-v1-2-bootstrap",
+  "validation_scope": "repository bootstrap subset only",
+  "claimed_validation_level": "Level 5 hold until live external proof is captured",
+  "level6_claimed": false,
+  "truth_boundary": "This manifest records a repository bootstrap subset. It is not a production deployment, external audit, independent verifier proof, release publication proof, or Level 6 admission."
+}
