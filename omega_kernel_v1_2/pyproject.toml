@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "omega-kernel-bootstrap"
+version = "1.2.0"
+description = "Ω Kernel v1.2 repository bootstrap subset: auditable constrained future-state selection with local tests and proof-path scaffolding"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "ZSK / ChatGPT"}]
+license = {text = "MIT"}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["omega*"]
+
+[project.scripts]
+omega-bootstrap = "omega.cli:main"

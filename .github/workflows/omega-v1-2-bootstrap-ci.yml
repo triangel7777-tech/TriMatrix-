@@ -1,0 +1,38 @@
+name: omega-v1-2-bootstrap-ci
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'omega_kernel_v1_2/**'
+      - '.github/workflows/omega-v1-2-bootstrap-ci.yml'
+  push:
+    branches: [ main, execution-prime-omega-v1-2-bootstrap ]
+    paths:
+      - 'omega_kernel_v1_2/**'
+      - '.github/workflows/omega-v1-2-bootstrap-ci.yml'
+
+jobs:
+  bootstrap-validation:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: omega_kernel_v1_2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install bootstrap package
+        run: python -m pip install -e . pytest
+      - name: Compile bootstrap source
+        run: python -m compileall omega tests
+      - name: Run tests
+        run: python -m pytest -q
+      - name: Run bootstrap validation CLI
+        run: omega-bootstrap validate --output reports/bootstrap_validation.json
+      - name: Upload bootstrap validation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: omega-v1-2-bootstrap-validation
+          path: omega_kernel_v1_2/reports/bootstrap_validation.json
